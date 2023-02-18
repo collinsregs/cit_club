@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class AnimationPage extends StatefulWidget {
   @override
@@ -10,6 +7,7 @@ class AnimationPage extends StatefulWidget {
 
 class AnimationPageState extends State<AnimationPage>
     with SingleTickerProviderStateMixin {
+  //declaring an animation controller and a ticker
   late AnimationController controller;
   late Animation<double> opacityAnimation;
 
@@ -26,6 +24,7 @@ class AnimationPageState extends State<AnimationPage>
         setState(() {});
       })
       ..addStatusListener((status) {
+        //reversing and replaying the animation
         if (status == AnimationStatus.completed) {
           controller.reverse();
         } else if (status == AnimationStatus.dismissed) {
@@ -36,6 +35,7 @@ class AnimationPageState extends State<AnimationPage>
     controller.forward();
   }
 
+//dispose the animation to clear memory
   @override
   void dispose() {
     controller.dispose();
