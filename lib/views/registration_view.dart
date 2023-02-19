@@ -1,7 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cit_club/views/login_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'home_page.dart';
 
 class Registerview extends StatefulWidget {
   const Registerview({super.key});
@@ -13,8 +17,19 @@ class Registerview extends StatefulWidget {
 class RegisterviewState extends State<Registerview> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+   
+
+  Future register() async {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _email.text.trim(), password: _password.text.trim());
+        
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+  }
+
   @override
   void initState() {
+    //creating text controllers
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
@@ -56,6 +71,7 @@ class RegisterviewState extends State<Registerview> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
+                      controller: _email,
                       decoration: InputDecoration(
                           border: InputBorder.none, hintText: 'Email'),
                     ),
@@ -76,6 +92,7 @@ class RegisterviewState extends State<Registerview> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
+                      controller: _password,
                       obscureText: true,
                       autocorrect: false,
                       decoration: InputDecoration(
@@ -89,19 +106,22 @@ class RegisterviewState extends State<Registerview> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      color: Color(0xFFEA4335),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Center(
-                      child: Text(
-                    'Register',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0),
-                  )),
+                child: GestureDetector(
+                  onTap: register,
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        color: Color(0xFFEA4335),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Center(
+                        child: Text(
+                      'Register',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    )),
+                  ),
                 ),
               ),
               SizedBox(
@@ -114,11 +134,15 @@ class RegisterviewState extends State<Registerview> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       )),
-                  Text(
-                    ' Login now',
-                    style: TextStyle(
-                      color: Color(0xFF4285F4),
-                      fontWeight: FontWeight.bold,
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => Loginview())),
+                    child: Text(
+                      ' Login now',
+                      style: TextStyle(
+                        color: Color(0xFF4285F4),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],

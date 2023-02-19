@@ -1,7 +1,7 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class AnimationPage extends StatefulWidget {
   @override
@@ -12,7 +12,7 @@ class AnimationPageState extends State<AnimationPage>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> opacityAnimation;
-
+  
   @override
   void initState() {
     super.initState();
@@ -44,6 +44,7 @@ class AnimationPageState extends State<AnimationPage>
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: Center(
         child: AnimatedBuilder(

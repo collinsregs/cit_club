@@ -1,5 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cit_club/views/home_page.dart';
+import 'package:cit_club/views/registration_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,8 +17,18 @@ class Loginview extends StatefulWidget {
 class LoginviewState extends State<Loginview> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  Future signIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _email.text.trim(),
+      password: _password.text.trim(),
+    );
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+  }
+
   @override
   void initState() {
+    //textfield controllers
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
@@ -22,6 +36,7 @@ class LoginviewState extends State<Loginview> {
 
   @override
   void dispose() {
+    //clearing controllers from memory
     _email.dispose();
     _password.dispose();
     super.dispose();
@@ -56,6 +71,7 @@ class LoginviewState extends State<Loginview> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
+                      controller: _email,
                       decoration: InputDecoration(
                           border: InputBorder.none, hintText: 'Email'),
                     ),
@@ -76,6 +92,7 @@ class LoginviewState extends State<Loginview> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
+                      controller: _password,
                       obscureText: true,
                       autocorrect: false,
                       decoration: InputDecoration(
@@ -89,19 +106,22 @@ class LoginviewState extends State<Loginview> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      color: Color(0xFFEA4335),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Center(
-                      child: Text(
-                    'Login',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0),
-                  )),
+                child: GestureDetector(
+                  onTap: signIn,
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        color: Color(0xFFEA4335),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Center(
+                        child: Text(
+                      'Login',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    )),
+                  ),
                 ),
               ),
               SizedBox(
@@ -114,11 +134,16 @@ class LoginviewState extends State<Loginview> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       )),
-                  Text(
-                    ' Register now',
-                    style: TextStyle(
-                      color: Color(0xFF4285F4),
-                      fontWeight: FontWeight.bold,
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => Registerview())),
+                    child: Text(
+                      ' Register now',
+                      style: TextStyle(
+                        color: Color(0xFF4285F4),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
