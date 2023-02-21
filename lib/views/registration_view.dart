@@ -17,14 +17,35 @@ class Registerview extends StatefulWidget {
 class RegisterviewState extends State<Registerview> {
   late final TextEditingController _email;
   late final TextEditingController _password;
-   
+  String errorMessage = '';
 
   Future register() async {
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _email.text.trim(), password: _password.text.trim());
-        
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _email.text.trim(), password: _password.text.trim());
+
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    } on FirebaseAuthException catch (e) {
+      
+      if (e.code == 'weak-password') {
+        setState(() {
+          errorMessage = 'weak password';
+        });
+      } else if (e.code == 'invalid-email') {
+        setState(() {
+          errorMessage = 'invalid email';
+        });
+      } else if (e.code == 'email-already-in-use') {
+        setState(() {
+          errorMessage = 'email is already in use';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'An error occured while signing in';
+      });
+    }
   }
 
   @override
@@ -79,9 +100,7 @@ class RegisterviewState extends State<Registerview> {
                 ),
               ),
               //password textfield
-              SizedBox(
-                height: 10,
-              ),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Container(
@@ -101,9 +120,14 @@ class RegisterviewState extends State<Registerview> {
                   ),
                 ),
               ),
+              Text(
+                errorMessage,
+                style: TextStyle(color: Colors.redAccent),
+              ),
               SizedBox(
                 height: 10,
               ),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: GestureDetector(

@@ -17,13 +17,36 @@ class Loginview extends StatefulWidget {
 class LoginviewState extends State<Loginview> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  String errorMessage = '';
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _email.text.trim(),
-      password: _password.text.trim(),
-    );
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _email.text.trim(),
+        password: _password.text.trim(),
+      );
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      print(e.code);
+      if (e.code == 'wrong-password') {
+        setState(() {
+          errorMessage = 'wrong password';
+        });
+      } else if (e.code == 'invalid-email') {
+        setState(() {
+          errorMessage = 'invalid email';
+        });
+      } else if (e.code == 'user-not-found') {
+        setState(() {
+          errorMessage = 'user not found';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'An error occured while signing in';
+      });
+    }
   }
 
   @override
@@ -101,6 +124,7 @@ class LoginviewState extends State<Loginview> {
                   ),
                 ),
               ),
+              Text(errorMessage),
               SizedBox(
                 height: 10,
               ),
