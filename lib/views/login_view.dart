@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cit_club/services/firebase_services.dart';
 import 'package:cit_club/views/home_page.dart';
 import 'package:cit_club/views/registration_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,10 +21,8 @@ class LoginviewState extends State<Loginview> {
   String errorMessage = '';
   Future signIn() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _email.text.trim(),
-        password: _password.text.trim(),
-      );
+      signInUser(_email.toString(), _password.toString());
+
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
     } on FirebaseAuthException catch (e) {
@@ -68,6 +67,7 @@ class LoginviewState extends State<Loginview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[100],
       body: SafeArea(
         child: Center(
           child: Column(
@@ -135,7 +135,7 @@ class LoginviewState extends State<Loginview> {
                   child: Container(
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                        color: Color(0xFFEA4335),
+                        color: Colors.blue[900],
                         borderRadius: BorderRadius.circular(12)),
                     child: Center(
                         child: Text(
@@ -165,7 +165,7 @@ class LoginviewState extends State<Loginview> {
                     child: Text(
                       ' Register now',
                       style: TextStyle(
-                        color: Color(0xFF4285F4),
+                        color: Colors.blue[800],
                         fontWeight: FontWeight.bold,
                       ),
                     ),

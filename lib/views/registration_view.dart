@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cit_club/services/firebase_services.dart';
 import 'package:cit_club/views/login_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,13 +22,11 @@ class RegisterviewState extends State<Registerview> {
 
   Future register() async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _email.text.trim(), password: _password.text.trim());
+      registerUser(_email.toString(), _password.toString());
 
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
     } on FirebaseAuthException catch (e) {
-      
       if (e.code == 'weak-password') {
         setState(() {
           errorMessage = 'weak password';
@@ -66,6 +65,7 @@ class RegisterviewState extends State<Registerview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[100],
       body: SafeArea(
         child: Center(
           child: Column(
@@ -100,7 +100,9 @@ class RegisterviewState extends State<Registerview> {
                 ),
               ),
               //password textfield
-
+              SizedBox(
+                height: 10,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Container(
@@ -135,7 +137,7 @@ class RegisterviewState extends State<Registerview> {
                   child: Container(
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                        color: Color(0xFFEA4335),
+                        color: Colors.blue[900],
                         borderRadius: BorderRadius.circular(12)),
                     child: Center(
                         child: Text(
@@ -164,7 +166,7 @@ class RegisterviewState extends State<Registerview> {
                     child: Text(
                       ' Login now',
                       style: TextStyle(
-                        color: Color(0xFF4285F4),
+                        color: Colors.blue[800],
                         fontWeight: FontWeight.bold,
                       ),
                     ),

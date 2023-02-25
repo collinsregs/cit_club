@@ -29,6 +29,13 @@
             {
               "client_id": "183589953082-pj0skslfef7hbhmpro2kpasn0p9gkfip.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "183589953082-omqgh5jq6dr1akgc7td2dobieosroljg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.citClub"
+              }
             }
           ]
         }

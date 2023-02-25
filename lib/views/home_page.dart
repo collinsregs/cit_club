@@ -1,10 +1,9 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cit_club/resources/app_drawer.dart';
 import 'package:cit_club/resources/bottom_nav.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cit_club/resources/news_loader.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,41 +15,52 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 240, 235, 235),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF4285f4),
-      ),
-      body: Column(children: [
-        SizedBox(
-          width: double.infinity,
-          child: Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            child: Container(
-              padding: EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'notifications',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text('Please verify your email'),
-                ],
-              ),
-            ),
-          ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: Colors.blue[50],
+        appBar: AppBar(
+          title: Text('H O M E'),
+          backgroundColor: Colors.blue[800],
         ),
-      ])
-      // ListView.builder(
-
-      // )
-      ,
-      bottomNavigationBar: BottomNav(),
+        endDrawer: MyAppDrawer(),
+        body: Column(
+          children: [
+            TabBar(tabs: [
+              Tab(
+                iconMargin: EdgeInsets.only(bottom: 0),
+                height: 41,
+                icon: Icon(
+                  Icons.newspaper,
+                  color: Colors.blueGrey,
+                ),
+                child: Text(
+                  'News',
+                  style: TextStyle(color: Colors.blueGrey),
+                ),
+              ),
+              Tab(
+                iconMargin: EdgeInsets.only(bottom: 0),
+                height: 41,
+                icon: Icon(
+                  Icons.folder_copy,
+                  color: Colors.blueGrey,
+                ),
+                child: Text(
+                  'Resources',
+                  style: TextStyle(color: Colors.blueGrey),
+                ),
+              ),
+            ]),
+            Expanded(
+                child: TabBarView(children: [
+              NewsLoader(),
+              NewsLoader(),
+            ]))
+          ],
+        ),
+        bottomNavigationBar: BottomNav(),
+      ),
     );
   }
 }

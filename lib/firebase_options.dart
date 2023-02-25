@@ -23,9 +23,15 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -59,25 +65,5 @@ class DefaultFirebaseOptions {
     messagingSenderId: '183589953082',
     projectId: 'cit-club',
     storageBucket: 'cit-club.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA8l5ry7gHlNE2SeSDnrnrA3rXOvnFfZQg',
-    appId: '1:183589953082:ios:5b63a8435edd678c6d1f03',
-    messagingSenderId: '183589953082',
-    projectId: 'cit-club',
-    storageBucket: 'cit-club.appspot.com',
-    iosClientId: '183589953082-omqgh5jq6dr1akgc7td2dobieosroljg.apps.googleusercontent.com',
-    iosBundleId: 'com.example.citClub',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyA8l5ry7gHlNE2SeSDnrnrA3rXOvnFfZQg',
-    appId: '1:183589953082:ios:5b63a8435edd678c6d1f03',
-    messagingSenderId: '183589953082',
-    projectId: 'cit-club',
-    storageBucket: 'cit-club.appspot.com',
-    iosClientId: '183589953082-omqgh5jq6dr1akgc7td2dobieosroljg.apps.googleusercontent.com',
-    iosBundleId: 'com.example.citClub',
   );
 }

@@ -59,6 +59,8 @@ class BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      backgroundColor: Colors.blue[50],
+      unselectedItemColor: Colors.blueGrey,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -69,12 +71,14 @@ class BottomNavState extends State<BottomNav> {
           label: 'Forum',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.event),
+          icon: Icon(
+            Icons.event,
+          ),
           label: 'Events',
         )
       ],
       currentIndex: selectedIndex,
-      selectedItemColor: Color(0xFF4285f4),
+      selectedItemColor: Colors.blue[900],
       onTap: onItemTaped,
     );
   }
