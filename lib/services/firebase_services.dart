@@ -15,7 +15,7 @@ void signOutUser(context) async {
       MaterialPageRoute(builder: (context) => const Loginview()));
 }
 
-Future signInUser(String email, String password) async {
-  await FirebaseAuth.instance
-      .signInWithEmailAndPassword(email: email, password: password);
-}
+// Future signInUser(String email, String password) async {
+//   await FirebaseAuth.instance
+//       .signInWithEmailAndPassword(email: email, password: password);
+// }

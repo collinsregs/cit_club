@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cit_club/services/firebase_services.dart';
 import 'package:cit_club/views/home_page.dart';
 import 'package:cit_club/views/registration_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,31 +19,21 @@ class LoginviewState extends State<Loginview> {
   String errorMessage = '';
   Future signIn() async {
     try {
-      signInUser(_email.toString(), _password.toString());
-
+      FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _email.toString().trim(), password: _password.toString());
+// @todo figure out the email error situation
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
-      print(e.code);
-      if (e.code == 'wrong-password') {
-        setState(() {
-          errorMessage = 'wrong password';
-        });
-      } else if (e.code == 'invalid-email') {
-        setState(() {
-          errorMessage = 'invalid email';
-        });
-      } else if (e.code == 'user-not-found') {
-        setState(() {
-          errorMessage = 'user not found';
-        });
-      }
     } catch (e) {
-      setState(() {
-        errorMessage = 'An error occured while signing in';
-      });
+      print(e.toString());
     }
+  }
+
+  secondSignIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _email.toString(), password: _password.toString());
+    final User? user = FirebaseAuth.instance.currentUser;
+    print(user);
   }
 
   @override
@@ -131,7 +119,7 @@ class LoginviewState extends State<Loginview> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: GestureDetector(
-                  onTap: signIn,
+                  onTap: secondSignIn,
                   child: Container(
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(

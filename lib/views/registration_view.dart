@@ -23,6 +23,8 @@ class RegisterviewState extends State<Registerview> {
   Future register() async {
     try {
       registerUser(_email.toString(), _password.toString());
+      FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _email.toString().trim(), password: _password.toString());
 
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
@@ -94,7 +96,9 @@ class RegisterviewState extends State<Registerview> {
                     child: TextField(
                       controller: _email,
                       decoration: InputDecoration(
-                          border: InputBorder.none, hintText: 'Email'),
+                        border: InputBorder.none,
+                        hintText: 'Email',
+                      ),
                     ),
                   ),
                 ),
