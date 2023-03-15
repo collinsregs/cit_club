@@ -4,6 +4,7 @@ import 'package:cit_club/resources/app_drawer.dart';
 import 'package:cit_club/resources/news_loader.dart';
 import 'package:cit_club/services/database.dart';
 import 'package:cit_club/services/news_from_firebase.dart';
+
 import 'package:cit_club/views/home_page.dart';
 import 'package:cit_club/views/login_view.dart';
 import 'package:cit_club/views/profile_view.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CIT club app',
-      home: NewsPage(),
+      home: Registerview(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

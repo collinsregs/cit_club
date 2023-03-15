@@ -3,10 +3,10 @@ import 'package:cit_club/views/login_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-Future registerUser(String email, String password) async {
-  await FirebaseAuth.instance
-      .createUserWithEmailAndPassword(email: email, password: password);
-}
+// Future registerUser(String email, String password) async {
+//   await FirebaseAuth.instance
+//       .createUserWithEmailAndPassword(email: email, password: password);
+// }
 
 FirebaseAuth auth = FirebaseAuth.instance;
 void signOutUser(context) async {
