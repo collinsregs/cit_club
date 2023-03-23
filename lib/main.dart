@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(MyApp());
 }
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CIT club app',
-      home: Registerview(),
+      home: DatabaseServices(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -51,7 +52,6 @@ class MainPage extends StatelessWidget {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          initializeFirebase();
           print(FirebaseAuth.instance.currentUser);
           if (snapshot.hasData) {
             return const HomePage();

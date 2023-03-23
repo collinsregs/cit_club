@@ -1,13 +1,18 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:ui' as ui;
 
 class DatabaseServices extends StatelessWidget {
   DatabaseServices({super.key});
   List<String> docIds = [];
   final storage = FirebaseStorage.instance;
+  CollectionReference news = FirebaseFirestore.instance.collection('example');
 
   Future getDocId() async {
     await FirebaseFirestore.instance
@@ -15,9 +20,77 @@ class DatabaseServices extends StatelessWidget {
         .get()
         .then((snapshot) => snapshot.docs.forEach((element) {
               print(element.reference);
-              print('thiis is working');
+              print('ime get refference');
               docIds.add(element.reference.id);
             }));
+  }
+
+  getNewsHeadlines(documentID) {
+    return FutureBuilder<DocumentSnapshot>(
+        future: news.doc(documentID).get(),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            print('getting headline is working');
+
+            return Text(' ${data['headline']}');
+          }
+          print('getting headline is loading');
+          return Text('loading..');
+        }));
+  }
+
+  getNewsArticles(documentID) {
+    return FutureBuilder<DocumentSnapshot>(
+        future: news.doc(documentID).get(),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            print('getting article is working');
+            return Text(' ${data['article']}');
+          }
+          print('getting article is loading');
+          return Text('loading..');
+        }));
+  }
+
+  getImage(documentID) {
+    final firebaseStorage = FirebaseStorage.instance.ref;
+    getImageUrl(String? imgName) async {
+      if (imgName == null) {
+        return null;
+      }
+      try {
+        var urlRef = firebaseStorage()
+            .child('events')
+            .child('${imgName.toLowerCase()}.png');
+        var imgUrl = await urlRef.getDownloadURL();
+        return imgUrl;
+      } catch (e) {
+        print(e);
+        return null;
+      }
+    }
+
+    geImageNames(documentID) {
+      return FutureBuilder<DocumentSnapshot>(
+          future: news.doc(documentID).get(),
+          builder: ((context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              Map<String, dynamic> data =
+                  snapshot.data!.data() as Map<String, dynamic>;
+              print('getting image name is working');
+              return Text(' ${data['photo']}');
+            }
+            print('getting image name is loading');
+            return Text('');
+          }));
+    }
+
+    print(getImageUrl(geImageNames(documentID).toString()));
+    return Text('get image is working');
   }
 
   @override
@@ -30,17 +103,20 @@ class DatabaseServices extends StatelessWidget {
           itemBuilder: (context, index) {
             return Column(
               children: [
-                ListTile(
-                  title: GetHeadline(documentId: docIds[index]),
-                ),
-                ListTile(
-                  title: GenerateNewsCards(documentId: docIds[index]),
-                ),
-                ListTile(
-                  title: GetImage(documentId: docIds[index]),
-                ),
-                GetImage(documentId: docIds[index]),
-                // ImageGetter(documentId: docIds[index])
+                // ListTile(
+                //   title: getNewsHeadlines(docIds[index]),
+                // ),
+                // ListTile(
+                //   title: getNewsArticles(docIds[index]),
+                // ),
+                // Card(
+                //   child: getNewsArticles(docIds[index]),
+                // ),
+                // Card(
+                //   child: Text('so inabuild the list'),
+                // ),
+                // getNewsArticles(docIds[index]),
+                getImage(docIds[index]),
               ],
             );
           },
@@ -51,90 +127,40 @@ class DatabaseServices extends StatelessWidget {
   }
 }
 
-// this is supposed to generate news headlines for viewing
-class GetHeadline extends StatelessWidget {
-  final String documentId;
-  GetHeadline({required this.documentId});
+// class GetImages extends StatelessWidget {
+//   final String documentId;
+//   GetImage({required this.documentId});
 
-  @override
-  Widget build(BuildContext context) {
-    CollectionReference news = FirebaseFirestore.instance.collection('example');
-    return FutureBuilder<DocumentSnapshot>(
-        future: news.doc(documentId).get(),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
-            return Text(' ${data['headline']}');
-          }
-          return Text('loading..');
-        }));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     CollectionReference news = FirebaseFirestore.instance.collection('example');
+//     return FutureBuilder<DocumentSnapshot>(
+//         future: news.doc(documentId).get(),
+//         builder: ((context, snapshot) {
+//           if (snapshot.connectionState == ConnectionState.done) {
+//             Map<String, dynamic> data =
+//                 snapshot.data!.data() as Map<String, dynamic>;
 
-// this is supposed to generate news articles for viewing
-class GenerateNewsCards extends StatelessWidget {
-  final String documentId;
-  GenerateNewsCards({required this.documentId});
+//             return Text('${data['photo']}');
+//           }
+//           return Text('loading..');
+//         }));
+//   }
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    CollectionReference news = FirebaseFirestore.instance.collection('example');
-    return FutureBuilder<DocumentSnapshot>(
-        future: news.doc(documentId).get(),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
-            return Text('${data['article']}');
-          }
-          return Text('loading..');
-        }));
-  }
-}
+// class ImageGet extends StatelessWidget {
+//   // final String documentId;
+//   // ImageGet({required this.documentId});
+// // Get a reference to the document containing the image URL
+//   getimage() async {
+//     final storageRef = FirebaseStorage.instance.ref();
+//     final imageUrl =
+//         await storageRef.child("events/summit.jpg").getDownloadURL();
+//     return Image.network(imageUrl);
+//   }
 
-//this is to generate image urls for the news cards
-class GetImage extends StatelessWidget {
-  final String documentId;
-  GetImage({required this.documentId});
-
-  @override
-  Widget build(BuildContext context) {
-    CollectionReference news = FirebaseFirestore.instance.collection('example');
-    return FutureBuilder<DocumentSnapshot>(
-        future: news.doc(documentId).get(),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
-
-            return Text('${data['photo']}');
-          }
-          return Text('loading..');
-        }));
-  }
-}
-
-class ImageGetter extends StatelessWidget {
-  final String documentId;
-  ImageGetter({required this.documentId});
-// Get a reference to the document containing the image URL
-  getimage() async {
-    // Get a reference to the document containing the image URL
-    final DocumentReference<Map<String, dynamic>> docRef =
-        FirebaseFirestore.instance.collection('news').doc(documentId);
-
-// Retrieve the image URL from the document
-    final DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-        await docRef.get();
-    final String imageUrl = docSnapshot.get('photo');
-
-// Load the image using the URL
-    final ImageProvider imageProvider = NetworkImage(imageUrl);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Image.memory(getimage());
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Image.memory(getimage());
+//   }
+// }

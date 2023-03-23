@@ -18,22 +18,32 @@ class LoginviewState extends State<Loginview> {
   late final TextEditingController _password;
   String errorMessage = '';
   Future signIn() async {
-    try {
-      FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _email.toString().trim(), password: _password.toString());
-// @todo figure out the email error situation
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
-    } catch (e) {
-      print(e.toString());
-    }
+//     try {
+//       print('trying to sign in anonymously');
+//       final userCredentials = await FirebaseAuth.instance.signInAnonymously();
+//       print('still trying to sing in with email');
+//       // FirebaseAuth.instance.signInWithEmailAndPassword(
+//       //     email: _email.toString().trim(), password: _password.toString());
+// // @todo figure out the email error situation
+//       Navigator.of(context)
+//           .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+//       dispose();
+//     } catch (e) {
+//       print(e);
+//     }
   }
 
   secondSignIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _email.toString(), password: _password.toString());
-    final User? user = FirebaseAuth.instance.currentUser;
-    print(user);
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _email.text, password: _password.text);
+      final User? user = FirebaseAuth.instance.currentUser;
+
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    } on FirebaseAuthException catch (e) {
+      print(e.toString());
+    }
   }
 
   @override

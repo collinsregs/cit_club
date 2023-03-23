@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'home_page.dart';
+
 class Registerview extends StatefulWidget {
   const Registerview({super.key});
 
@@ -21,10 +23,11 @@ class RegisterviewState extends State<Registerview> {
   Future register() async {
     try {
       FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _email.toString().trim(), password: _password.toString());
+          email: _email.text.trim(), password: _password.text);
+      print(_email);
 
-      // Navigator.of(context)
-      //     .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         setState(() {
