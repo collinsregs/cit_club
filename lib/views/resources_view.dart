@@ -1,4 +1,5 @@
 import 'package:cit_club/views/resource/flutter_dev_resource_view.dart';
+import 'package:cit_club/views/resource/flutter_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -16,6 +17,10 @@ class _ResourceViewState extends State<ResourceView> {
     return ListView(
       children: [
         GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => FlutterResources()));
+          },
           child: Padding(
             padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
             child: Card(

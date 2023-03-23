@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CIT club app',
-      home: DatabaseServices(),
+      home: HomePage(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
