@@ -11,6 +11,7 @@ import 'package:cit_club/views/profile_view.dart';
 import 'package:cit_club/views/registration_view.dart';
 import 'package:cit_club/views/resources_view.dart';
 import 'package:cit_club/views/secondRegistaration.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,9 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: '32A5F083-FB06-4D69-AD4D-AA97D6391B93',
+  );
 
   runApp(MyApp());
 }
