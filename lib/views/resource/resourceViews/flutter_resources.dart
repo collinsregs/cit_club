@@ -189,7 +189,7 @@ class _FlutterResourcesState extends State<FlutterResources> {
                     children: <TextSpan>[
                       TextSpan(
                           text:
-                              'In this example, we use the "MaterialApp" widget to create a new Flutter app. We then use the "Scaffold" widget to define the basic structure of the app, which includes an app bar and a body. In the body, we use the "Center" widget to center the text widget that displays the welcome message.\n'),
+                              '\nIn this example, we use the "MaterialApp" widget to create a new Flutter app. We then use the "Scaffold" widget to define the basic structure of the app, which includes an app bar and a body. In the body, we use the "Center" widget to center the text widget that displays the welcome message.\n'),
                     ],
                   ),
                 ),

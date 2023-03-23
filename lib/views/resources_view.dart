@@ -1,5 +1,6 @@
 import 'package:cit_club/views/resource/flutter_dev_resource_view.dart';
-import 'package:cit_club/views/resource/flutter_resources.dart';
+import 'package:cit_club/views/resource/resourceViews/flutter_resources.dart';
+import 'package:cit_club/views/resource/resourceViews/ux_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -38,6 +39,10 @@ class _ResourceViewState extends State<ResourceView> {
           ),
         ),
         GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => UxResources()));
+          },
           child: Padding(
             padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
             child: Card(
