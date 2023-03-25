@@ -118,6 +118,92 @@ class EventsDatabaseServices extends StatelessWidget {
     );
   }
 
+  getEventSummaryPage(documentId, imageId) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          getEventsTitle(documentId),
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.blue[800],
+      ),
+      body: Container(
+        height: double.infinity,
+        child: Stack(
+          children: [
+            Image.asset(
+              imageId,
+              width: double.infinity,
+              fit: BoxFit.fill,
+            ),
+            Positioned(
+              top: 150,
+              child: Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50)),
+                  color: Colors.blue[200],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          text: getEventsTitle(documentId).toString(),
+                          style: const TextStyle(
+                              fontSize: 25, color: Colors.black),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        getEventsDate(documentId).toString(),
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: getEventSummarry(documentId).toString(),
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 40,
+                        width: 140,
+                        decoration: BoxDecoration(
+                          color: Colors.blue[900],
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        child: const Center(
+                            child: Text(
+                          'Book a seat',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        )),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -126,28 +212,39 @@ class EventsDatabaseServices extends StatelessWidget {
         itemBuilder: (context, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Card(
-              child: Stack(
-                alignment: Alignment.bottomLeft,
-                children: [
-                  getImage(imageNames[index]),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    color: const Color.fromARGB(190, 187, 222, 251),
-                    height: 40,
-                    width: double.infinity,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                            left: 10, child: getEventsTitle(docIds[index])),
-                        Positioned(
-                            top: 20,
-                            left: 10,
-                            child: getEventsDate(docIds[index])),
-                      ],
-                    ),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        getEventSummaryPage(docIds[index], imageNames[index]),
                   ),
-                ],
+                );
+              },
+              child: Card(
+                child: Stack(
+                  alignment: Alignment.bottomLeft,
+                  children: [
+                    getImage(imageNames[index]),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      color: const Color.fromARGB(190, 187, 222, 251),
+                      height: 40,
+                      width: double.infinity,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                              left: 10, child: getEventsTitle(docIds[index])),
+                          Positioned(
+                              top: 20,
+                              left: 10,
+                              child: getEventsDate(docIds[index])),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

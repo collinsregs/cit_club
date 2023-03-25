@@ -5,6 +5,7 @@ import 'package:cit_club/resources/news_loader.dart';
 import 'package:cit_club/services/database.dart';
 import 'package:cit_club/services/events_database.dart';
 import 'package:cit_club/services/news_from_firebase.dart';
+import 'package:cit_club/services/testTryForEventNewsPages.dart';
 
 import 'package:cit_club/views/home_page.dart';
 import 'package:cit_club/views/login_view.dart';
