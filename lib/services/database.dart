@@ -2,27 +2,36 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:ui' as ui;
 
 import 'package:google_fonts/google_fonts.dart';
 
-class DatabaseServices extends StatelessWidget {
-  DatabaseServices({super.key});
-  List<String> docIds = [];
+class NewsDatabaseServices extends StatelessWidget {
+  NewsDatabaseServices({super.key});
+  final List<String> docIds = [];
   final storage = FirebaseStorage.instance;
-  CollectionReference news = FirebaseFirestore.instance.collection('example');
+  final CollectionReference news =
+      FirebaseFirestore.instance.collection('news');
+  final List<String> imageNames = [
+    'assets/images/news 5.jpg',
+    'assets/images/news 1.jpg',
+    'assets/images/news 2.jpg',
+    'assets/images/news 3.jpg',
+    'assets/images/news 4.jpg',
+    'assets/images/news 6.jpg',
+    'assets/images/news 7.jpg',
+    'assets/images/news 11.jpg',
+    'assets/images/news 12.jpg',
+    'assets/images/news 13.jpg',
+    'assets/images/news (14).jpg',
+    'assets/images/news (15).jpg'
+  ];
 
   Future getDocId() async {
     await FirebaseFirestore.instance
-        .collection('example')
+        .collection('news')
         .get()
         .then((snapshot) => snapshot.docs.forEach((element) {
-              print(element.reference);
-              print('ime get refference');
               docIds.add(element.reference.id);
             }));
   }
@@ -32,17 +41,21 @@ class DatabaseServices extends StatelessWidget {
         future: news.doc(documentID).get(),
         builder: ((context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
-            print('getting headline is working');
+            if (snapshot.hasData && snapshot.data!.exists) {
+              Map<String, dynamic> data =
+                  snapshot.data!.data() as Map<String, dynamic>;
 
-            return Text(
-              ' ${data['headline']}',
-              style: GoogleFonts.sourceSansPro(fontSize: 25),
-            );
+              return Text(
+                ' ${data['Headline']}',
+                style: GoogleFonts.sourceSansPro(
+                    fontSize: 20, color: Colors.blueGrey[900]),
+              );
+            } else {
+              return Text('No Data');
+            }
           }
-          print('getting headline is loading');
-          return Text('loading..');
+
+          return const Text('loading..');
         }));
   }
 
@@ -53,122 +66,48 @@ class DatabaseServices extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
-            print('getting article is working');
-            return Text(' ${data['article']}');
+
+            return Text(' ${data['Article']}');
           }
-          print('getting article is loading');
-          return Text('loading..');
+
+          return const Text('loading..');
         }));
   }
 
   getImage(documentID) {
-    final firebaseStorage = FirebaseStorage.instance.ref;
-    // getImageUrl(String? imgName) async {
-    //   if (imgName == null) {
-    //     return null;
-    //   }
-    //   try {
-    //     print(imgName);
-    //     var urlRef = firebaseStorage()
-    //         .child('events')
-    //         .child('${imgName.toLowerCase()}.png');
-    //     var imgUrl = await urlRef.getDownloadURL();
-    //     return imgUrl;
-    //   } catch (e) {
-    //     print(e);
-    //     return null;
-    //   }
-    // }
-
-    geImageNames(documentID) {
-      return FutureBuilder<DocumentSnapshot>(
-          future: news.doc(documentID).get(),
-          builder: ((context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              Map<String, dynamic> data =
-                  snapshot.data!.data() as Map<String, dynamic>;
-              print('getting image name is working');
-              return Text(' ${data['photo']}');
-            }
-            print('getting image name is loading');
-            return Text('');
-          }));
-    }
-
-    return geImageNames(documentID).toString();
+    return Image.asset(
+      documentID,
+      height: 200,
+      width: double.infinity,
+      fit: BoxFit.cover,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-          child: FutureBuilder(
-        future: getDocId(),
-        builder: (context, snapshot) => ListView.builder(
-          itemBuilder: (context, index) {
-            print(getImage(docIds[index]).toString());
-            return Card(
-              child: GestureDetector(
-                child: Stack(alignment: Alignment.bottomLeft, children: [
-                  Image.asset(
-                    getImage(docIds[index]),
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.contain,
+    return FutureBuilder(
+      future: getDocId(),
+      builder: (context, snapshot) => ListView.builder(
+        itemBuilder: (context, index) {
+          return Card(
+            color: const Color.fromARGB(255, 187, 222, 251),
+            child: GestureDetector(
+              child: Column(children: [
+                getImage(imageNames[index]),
+                Container(
+                  height: 40,
+                  width: double.infinity,
+                  color: const Color.fromARGB(190, 187, 222, 251),
+                  child: Center(
+                    child: getNewsHeadlines(docIds[index]),
                   ),
-                  Positioned(
-                    child: Container(
-                      height: 30,
-                      width: double.infinity,
-                      color: Colors.grey,
-                      child: getNewsHeadlines(docIds[index]),
-                    ),
-                  )
-                ]),
-              ),
-            );
-          },
-          itemCount: docIds.length,
-        ),
-      )),
+                )
+              ]),
+            ),
+          );
+        },
+        itemCount: docIds.length,
+      ),
     );
   }
 }
-
-// class GetImages extends StatelessWidget {
-//   final String documentId;
-//   GetImage({required this.documentId});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     CollectionReference news = FirebaseFirestore.instance.collection('example');
-//     return FutureBuilder<DocumentSnapshot>(
-//         future: news.doc(documentId).get(),
-//         builder: ((context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.done) {
-//             Map<String, dynamic> data =
-//                 snapshot.data!.data() as Map<String, dynamic>;
-
-//             return Text('${data['photo']}');
-//           }
-//           return Text('loading..');
-//         }));
-//   }
-// }
-
-// class ImageGet extends StatelessWidget {
-//   // final String documentId;
-//   // ImageGet({required this.documentId});
-// // Get a reference to the document containing the image URL
-//   getimage() async {
-//     final storageRef = FirebaseStorage.instance.ref();
-//     final imageUrl =
-//         await storageRef.child("events/summit.jpg").getDownloadURL();
-//     return Image.network(imageUrl);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Image.memory(getimage());
-//   }
-// }

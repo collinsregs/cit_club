@@ -3,6 +3,7 @@
 import 'package:cit_club/resources/app_drawer.dart';
 import 'package:cit_club/resources/bottom_nav.dart';
 import 'package:cit_club/resources/news_loader.dart';
+import 'package:cit_club/services/database.dart';
 import 'package:cit_club/views/resources_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(UserCredential);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
             ]),
             Expanded(
                 child: TabBarView(children: [
-              NewsLoader(),
+              NewsDatabaseServices(),
               ResourceView(),
             ]))
           ],

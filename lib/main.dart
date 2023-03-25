@@ -3,6 +3,7 @@ import 'package:cit_club/firebase_options.dart';
 import 'package:cit_club/resources/app_drawer.dart';
 import 'package:cit_club/resources/news_loader.dart';
 import 'package:cit_club/services/database.dart';
+import 'package:cit_club/services/events_database.dart';
 import 'package:cit_club/services/news_from_firebase.dart';
 
 import 'package:cit_club/views/home_page.dart';
@@ -20,9 +21,9 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseAppCheck.instance.activate(
-    webRecaptchaSiteKey: '32A5F083-FB06-4D69-AD4D-AA97D6391B93',
-  );
+  // await FirebaseAppCheck.instance.activate(
+  //   webRecaptchaSiteKey: '32A5F083-FB06-4D69-AD4D-AA97D6391B93',
+  // );
 
   runApp(MyApp());
 }
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CIT club app',
-      home: DatabaseServices(),
+      home: HomePage(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
