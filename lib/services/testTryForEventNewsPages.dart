@@ -25,13 +25,13 @@ class _TestTryState extends State<TestTry> {
             children: [
               Image.asset(
                 'assets/images/event1.jpeg',
-                width: double.infinity,
+                width: MediaQuery.of(context).size.width,
                 fit: BoxFit.fill,
               ),
               Positioned(
                   top: 150,
                   child: Container(
-                    height: double.infinity,
+                    height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
@@ -46,17 +46,10 @@ class _TestTryState extends State<TestTry> {
                         children: [
                           RichText(
                             text: TextSpan(
-                              text: 'event name',
+                              text: 'news title',
                               style:
                                   TextStyle(fontSize: 25, color: Colors.black),
                             ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'event date',
-                            style: TextStyle(fontSize: 20),
                           ),
                           SizedBox(
                             height: 5,
@@ -67,25 +60,6 @@ class _TestTryState extends State<TestTry> {
                               style: const TextStyle(color: Colors.black),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            height: 40,
-                            width: 140,
-                            decoration: BoxDecoration(
-                              color: Colors.blue[900],
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20),
-                              ),
-                            ),
-                            child: Center(
-                                child: Text(
-                              'Book a seat',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            )),
-                          )
                         ],
                       ),
                     ),

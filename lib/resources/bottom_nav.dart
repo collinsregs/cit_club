@@ -46,8 +46,8 @@ class BottomNavState extends State<BottomNav> {
             context, MaterialPageRoute(builder: (context) => const HomePage()));
         break;
       case 1:
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const ForumView()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => ForumView()));
         break;
       case 2:
         Navigator.pushReplacement(context,

@@ -48,6 +48,13 @@ class EventsDatabaseServices extends StatelessWidget {
             }));
   }
 
+  Future<Map<String, dynamic>> getData(documentId) async {
+    final document =
+        FirebaseFirestore.instance.collection('events').doc(documentId);
+    final snapshot = await document.get();
+    return snapshot.data() as Map<String, dynamic>;
+  }
+
   getEventsTitle(documentID) {
     return FutureBuilder<DocumentSnapshot>(
         future: news.doc(documentID).get(),
@@ -62,6 +69,29 @@ class EventsDatabaseServices extends StatelessWidget {
                 style: GoogleFonts.sourceSansPro(
                     fontSize: 20, color: Colors.blueGrey[900]),
               );
+            } else {
+              return const Text('No Data');
+            }
+          }
+
+          return const Text('loading..');
+        }));
+  }
+
+  getEventsTitleFull(documentID) {
+    return FutureBuilder<DocumentSnapshot>(
+        future: news.doc(documentID).get(),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData && snapshot.data!.exists) {
+              Map<String, dynamic> data =
+                  snapshot.data!.data() as Map<String, dynamic>;
+
+              return RichText(
+                  text: TextSpan(
+                text: ' ${data['Title']}',
+                style: const TextStyle(fontSize: 25, color: Colors.black),
+              ));
             } else {
               return const Text('No Data');
             }
@@ -94,6 +124,31 @@ class EventsDatabaseServices extends StatelessWidget {
         }));
   }
 
+  getEventsDateFull(documentID) {
+    return FutureBuilder<DocumentSnapshot>(
+        future: news.doc(documentID).get(),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData && snapshot.data!.exists) {
+              Map<String, dynamic> data =
+                  snapshot.data!.data() as Map<String, dynamic>;
+
+              return RichText(
+                text: TextSpan(
+                  text: ' ${data['Date']}',
+                  style: GoogleFonts.sourceSansPro(
+                      fontSize: 20, color: Colors.blueGrey[900]),
+                ),
+              );
+            } else {
+              return RichText(text: const TextSpan(text: 'No Data'));
+            }
+          }
+
+          return RichText(text: const TextSpan(text: 'loading ...'));
+        }));
+  }
+
   getEventSummarry(documentID) {
     return FutureBuilder<DocumentSnapshot>(
         future: news.doc(documentID).get(),
@@ -109,6 +164,26 @@ class EventsDatabaseServices extends StatelessWidget {
         }));
   }
 
+  getEventSummarryFull(documentID) {
+    return FutureBuilder<DocumentSnapshot>(
+        future: news.doc(documentID).get(),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+
+            return RichText(
+                text: TextSpan(
+              text: ' ${data['Summary']}',
+              style: GoogleFonts.sourceSansPro(
+                  fontSize: 20, color: Colors.blueGrey[900]),
+            ));
+          }
+
+          return RichText(text: const TextSpan(text: 'loading ...'));
+        }));
+  }
+
   getImage(documentID) {
     return Image.asset(
       documentID,
@@ -118,87 +193,92 @@ class EventsDatabaseServices extends StatelessWidget {
     );
   }
 
-  getEventSummaryPage(documentId, imageId) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          getEventsTitle(documentId),
-          style: TextStyle(color: Colors.white),
+  getEventSummaryPage(documentId, imageId, context) {
+    return SafeArea(
+      child: Scaffold(
+        // backgroundColor: Colors.blue[200],
+        appBar: AppBar(
+          title: const Text('event'),
+          backgroundColor: Colors.blue[800],
         ),
-        backgroundColor: Colors.blue[800],
-      ),
-      body: Container(
-        height: double.infinity,
-        child: Stack(
-          children: [
-            Image.asset(
-              imageId,
-              width: double.infinity,
-              fit: BoxFit.fill,
-            ),
-            Positioned(
-              top: 150,
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50)),
-                  color: Colors.blue[200],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          text: getEventsTitle(documentId).toString(),
-                          style: const TextStyle(
-                              fontSize: 25, color: Colors.black),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        getEventsDate(documentId).toString(),
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: getEventSummarry(documentId).toString(),
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 40,
-                        width: 140,
-                        decoration: BoxDecoration(
-                          color: Colors.blue[900],
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        child: const Center(
-                            child: Text(
-                          'Book a seat',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        )),
-                      )
-                    ],
-                  ),
-                ),
+        body: Container(
+          color: Colors.blue[200],
+          height: MediaQuery.of(context).size.height,
+          child: Stack(
+            children: [
+              Image.asset(
+                imageId,
+                height: 200,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.fill,
               ),
-            )
-          ],
+              Positioned(
+                  top: 150,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50)),
+                      color: Colors.blue[100],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // RichText(
+                          //   text: TextSpan(
+                          //     text: 'event name',
+                          //     style:
+                          //         TextStyle(fontSize: 25, color: Colors.black),
+                          //   ),
+                          // ),
+                          getEventsTitleFull(documentId),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          // Text(
+                          //   'event date',
+                          //   style: TextStyle(fontSize: 20),
+                          // ),
+                          getEventsDateFull(documentId),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          // RichText(
+                          //   text: TextSpan(
+                          //     text: 'events surmary',
+                          //     style: const TextStyle(color: Colors.black),
+                          //   ),
+                          // ),
+                          getEventSummarryFull(documentId),
+                          const SizedBox(
+                            height: 40,
+                          ),
+                          Container(
+                            height: 40,
+                            width: 140,
+                            decoration: BoxDecoration(
+                              color: Colors.blue[900],
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            child: const Center(
+                                child: Text(
+                              'Book a seat',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            )),
+                          )
+                        ],
+                      ),
+                    ),
+                  ))
+            ],
+          ),
         ),
       ),
     );
@@ -217,8 +297,8 @@ class EventsDatabaseServices extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        getEventSummaryPage(docIds[index], imageNames[index]),
+                    builder: (context) => getEventSummaryPage(
+                        docIds[index], imageNames[index], context),
                   ),
                 );
               },

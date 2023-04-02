@@ -6,6 +6,8 @@ import 'package:cit_club/services/database.dart';
 import 'package:cit_club/services/events_database.dart';
 import 'package:cit_club/services/news_from_firebase.dart';
 import 'package:cit_club/services/testTryForEventNewsPages.dart';
+import 'package:cit_club/views/events_view.dart';
+import 'package:cit_club/views/forum_view.dart';
 
 import 'package:cit_club/views/home_page.dart';
 import 'package:cit_club/views/login_view.dart';
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CIT club app',
-      home: HomePage(),
+      home: MainPage(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -47,7 +49,6 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(UserCredential);
     initializeFirebase() async {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
